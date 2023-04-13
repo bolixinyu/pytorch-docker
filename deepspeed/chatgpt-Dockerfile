@@ -35,6 +35,6 @@ RUN PIP_INSTALL="/opt/conda/envs/dev/bin/pip install --no-cache-dir" && \
     $PIP_INSTALL triton
 
 RUN PIP_INSTALL="/opt/conda/envs/dev/bin/pip install --no-cache-dir" && \
-    DS_BUILD_OPS=1 DS_BUILD_SPARSE_ATTN=0 TORCH_CUDA_ARCH_LIST="6.0;7.0;7.5;8.0;8.6" $PIP_INSTALL git+https://github.com/microsoft/deepspeed.git --global-option="build_ext" --global-option="-j8" && \
+    $PIP_INSTALL git+https://github.com/microsoft/deepspeed.git --global-option="build_ext" --global-option="-j8" && \
     $PIP_INSTALL datasets>=2.8.0 sentencepiece>=0.1.97 protobuf==3.20.3 && \
     $PIP_INSTALL git+https://github.com/huggingface/transformers

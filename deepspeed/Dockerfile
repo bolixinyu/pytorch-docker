@@ -29,7 +29,7 @@ RUN /opt/conda/bin/mamba create -n dev python=${PYTHON_VERSION} && \
     echo 'Conda Install Done!'
 
 RUN PIP_INSTALL="/opt/conda/envs/dev/bin/pip install --no-cache-dir" && \
-    $PIP_INSTALL torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu117
+    $PIP_INSTALL torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu117 && \
     $PIP_INSTALL triton==1.0.0 && \
     DS_BUILD_OPS=1 TORCH_CUDA_ARCH_LIST="6.0;7.0;7.5;8.0;8.6" $PIP_INSTALL -vvv deepspeed && \
     echo 'PIP Install Done!'

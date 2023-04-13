@@ -32,4 +32,4 @@ RUN PIP_INSTALL="/opt/conda/envs/dev/bin/pip install --no-cache-dir" && \
     $PIP_INSTALL torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu117 && \
     $PIP_INSTALL triton
 
-RUN DS_BUILD_OPS=1 TORCH_CUDA_ARCH_LIST="6.0;7.0;7.5;8.0;8.6" /opt/conda/envs/dev/bin/pip install -vvv --no-cache-dir deepspeed --global-option="build_ext" --global-option="-j8"
+RUN DS_BUILD_OPS=1 TORCH_CUDA_ARCH_LIST="6.0;7.0;7.5;8.0;8.6" /opt/conda/envs/dev/bin/pip install --no-cache-dir deepspeed --global-option="build_ext" --global-option="-j8"

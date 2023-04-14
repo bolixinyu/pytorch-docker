@@ -11,7 +11,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends --no-install-suggest
     rm -f /etc/apt/apt.conf.d/docker-clean && \
     apt-get update && \
     # libaio-dev for building deepspeed
-    DEBIAN_FRONTEND=noninteractive $APT_INSTALL ca-certificates git wget libaio-dev && \
+    DEBIAN_FRONTEND=noninteractive $APT_INSTALL ca-certificates git wget libaio-dev cmake && \
     apt-get clean
 
 RUN wget https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh -O ~/installer.sh && \

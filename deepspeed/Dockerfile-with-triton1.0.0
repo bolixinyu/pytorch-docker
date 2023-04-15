@@ -2,7 +2,7 @@ FROM nvidia/cuda:11.7.0-devel-ubuntu22.04
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
     PATH=/opt/conda/bin:$PATH \
-    PYTHON_VERSION=3.10 
+    PYTHON_VERSION=3.9
 
 RUN APT_INSTALL="apt-get install -y --no-install-recommends --no-install-suggests" && \
     GIT_CLONE="git clone --depth 10" && \

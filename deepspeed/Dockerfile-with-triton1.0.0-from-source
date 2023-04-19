@@ -1,3 +1,4 @@
+# registry.cn-hongkong.aliyuncs.com/chenyaofo/deepspeed:test
 FROM nvidia/cuda:11.7.0-devel-ubuntu22.04
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \

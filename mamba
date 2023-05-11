@@ -1,0 +1,32 @@
+# registry.cn-hongkong.aliyuncs.com/chenyaofo/mamba:test
+FROM nvidia/cuda:11.7.0-devel-ubuntu22.04
+
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+    PATH=~/.local/bin:$PATH \
+    MAMBA_ROOT_PREFIX=/opt/mamba \
+    PYTHON_VERSION=3.10 
+
+RUN APT_INSTALL="apt-get install -y --no-install-recommends --no-install-suggests" && \
+    GIT_CLONE="git clone --depth 10" && \
+    rm -rf /etc/apt/sources.list.d \
+    rm -f /etc/apt/apt.conf.d/docker-clean && \
+    apt-get update && \
+    # libaio-dev for building deepspeed
+    DEBIAN_FRONTEND=noninteractive $APT_INSTALL ca-certificates git wget curl libaio-dev cmake && \
+    apt-get clean
+
+RUN mkdir -p ~/.local/bin && \
+    curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C ~/.local/bin/ --strip-components=1 bin/micromamba && \
+    ~/.local/bin/micromamba shell init -s bash -p $MAMBA_ROOT_PREFIX && \
+    ~/.local/bin/micromamba create -y -n dev python=${PYTHON_VERSION} -c conda-forge -r $MAMBA_ROOT_PREFIX && \
+    ~/.local/bin/micromamba clean -ay && \
+    echo "micromamba activate dev" >> ~/.bashrc && \
+    echo 'Mamba Install Done!'
+
+RUN PIP_INSTALL="/opt/mamba/envs/dev/bin/pip install --no-cache-dir" && \
+    $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/pytorch/torch1.13.1-cu117 && \
+    $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/dali/cu11x && \
+    $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/huggingface && \
+    $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/common && \
+    $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/deepspeed && \
+    echo "PIP Install Done!"

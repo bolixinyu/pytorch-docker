@@ -4,6 +4,9 @@ FROM nvidia/cuda:11.7.0-devel-ubuntu22.04
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
     PATH=~/.local/bin:$PATH \
     MAMBA_ROOT_PREFIX=/opt/mamba \
+    DS_BUILD_OPS=1 \
+    DS_BUILD_SPARSE_ATTN=0 \
+    TORCH_CUDA_ARCH_LIST="6.0;7.0;7.5;8.0;8.6" \
     PYTHON_VERSION=3.10 
 
 RUN APT_INSTALL="apt-get install -y --no-install-recommends --no-install-suggests" && \

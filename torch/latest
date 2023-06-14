@@ -41,7 +41,7 @@ RUN /opt/conda/bin/mamba create -n dev python=${PYTHON_VERSION} && \
     $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/dali/cu11x && \
     $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/huggingface && \
     $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/common && \
-    $PIP_INSTALL deepspeed  --global-option="build_ext" --global-option="-j8" && \
+    $PIP_INSTALL deepspeed  && \
     DS_REPORT="/opt/conda/envs/dev/bin/pip/ds_report" && \
     $DS_REPORT && \
     echo "PIP Install Done!"

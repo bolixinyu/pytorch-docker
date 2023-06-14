@@ -3,3 +3,4 @@ datasets
 huggingface_hub
 accelerate
 peft
+sentence_transformers

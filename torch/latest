@@ -7,7 +7,7 @@ ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
     PYTHON_VERSION=3.10 \
     DS_BUILD_OPS=1 \
     DS_BUILD_SPARSE_ATTN=0 \
-    TORCH_CUDA_ARCH_LIST="7.0;7.5;8.0;8.6"
+    TORCH_CUDA_ARCH_LIST="7.0;7.5;8.0;8.6;8.9;9.0"
     # 7.0 for V100; 7.5 for T4; 8.0 for A100; 8.6 for 3090; 8.9 for 4090; 9.0 for H100;
 
 RUN APT_INSTALL="apt-get install -y --no-install-recommends --no-install-suggests" && \
@@ -41,8 +41,8 @@ RUN /opt/conda/bin/mamba create -n dev python=${PYTHON_VERSION} && \
     $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/dali/cu11x && \
     $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/huggingface && \
     $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/common && \
-    $PIP_INSTALL deepspeed  && \
-    DS_REPORT="/opt/conda/envs/dev/bin/pip/ds_report" && \
+    $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/deepspeed  && \
+    DS_REPORT="/opt/conda/envs/dev/bin/ds_report" && \
     $DS_REPORT && \
     echo "PIP Install Done!"
 

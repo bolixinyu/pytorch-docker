@@ -21,6 +21,13 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends --no-install-suggest
     ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime && \
     echo ${TZ} > /etc/timezone && \
     dpkg-reconfigure --frontend noninteractive tzdata && \
+    # the followings are for sshd service (deepspeed multi-nodes training)
+    DEBIAN_FRONTEND=noninteractive $APT_INSTALL openssh-server && \
+    mkdir /var/run/sshd && \
+    sed -i 's/#Port 22/Port 8022/' /etc/ssh/sshd_config && \
+    ssh-keygen -t rsa -C "virtual-machine" -f "$HOME/.ssh/id_rsa" -P "" && \
+    cat $HOME/.ssh/id_rsa.pub > $HOME/.ssh/authorized_keys && \
+    # finally clean the cache
     apt-get clean 
 
 RUN wget https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh -O ~/installer.sh && \
@@ -48,3 +55,5 @@ RUN /opt/conda/bin/mamba create -n dev python=${PYTHON_VERSION} && \
     $PIP_LIST && \
     echo "PIP Install Done!"
 
+EXPOSE 8022
+CMD ["/usr/sbin/sshd", "-D"]

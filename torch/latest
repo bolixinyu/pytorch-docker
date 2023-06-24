@@ -57,3 +57,4 @@ RUN /opt/conda/bin/mamba create -n dev python=${PYTHON_VERSION} && \
 
 EXPOSE 8022
 CMD ["/usr/sbin/sshd", "-D"]
+# docker run -d --gpus all --name ds-container --network host --privileged --ipc=host registry.cn-hongkong.aliyuncs.com/chenyaofo/pytorch:latest

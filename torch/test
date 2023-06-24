@@ -1,4 +1,4 @@
-# registry.cn-hongkong.aliyuncs.com/chenyaofo/pytorch:latest
+# registry.cn-hongkong.aliyuncs.com/chenyaofo/pytorch:test
 FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
@@ -42,24 +42,6 @@ RUN wget https://github.com/conda-forge/miniforge/releases/latest/download/Mamba
     find /opt/conda/ -follow -type f -name '*.a' -delete && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete
 
-RUN /opt/conda/bin/mamba create -n dev python=${PYTHON_VERSION} && \
-    CONDA_INSTALL="/opt/conda/bin/mamba install -n dev -y" && \
-    /opt/conda/bin/mamba clean -afy && \
-    echo 'Conda Install Done!' && \
-    PIP_INSTALL="/opt/conda/envs/dev/bin/pip install --no-cache-dir" && \
-    $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/pytorch/torch2.0.1-cu118 && \
-    $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/dali/cu11x && \
-    $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/huggingface && \
-    $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/common && \
-    $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/deepspeed  && \
-    DS_REPORT="/opt/conda/envs/dev/bin/ds_report" && \
-    $DS_REPORT && \
-    PIP_LIST="/opt/conda/envs/dev/bin/pip list" && \
-    $PIP_LIST && \
-    echo "PIP Install Done!" && \
-    git clone  --depth 1 https://github.com/microsoft/DeepSpeedExamples && \
-    cp -r DeepSpeedExamples/benchmarks /opt/conda/envs/dev/lib/python$PYTHON_VERSION/site-packages/ && \
-    rm -rf DeepSpeedExamples
 
 EXPOSE 8022
 CMD ["/usr/sbin/sshd", "-D"]

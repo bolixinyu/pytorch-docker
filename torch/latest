@@ -18,10 +18,10 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends --no-install-suggest
     apt-get update && \
     # libaio-dev for building deepspeed
     DEBIAN_FRONTEND=noninteractive $APT_INSTALL tzdata ca-certificates git wget cmake libaio-dev && \
-    apt-get clean && \
     ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime && \
     echo ${TZ} > /etc/timezone && \
-    dpkg-reconfigure --frontend noninteractive tzdata
+    dpkg-reconfigure --frontend noninteractive tzdata && \
+    apt-get clean 
 
 RUN wget https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh -O ~/installer.sh && \
     /bin/bash ~/installer.sh -b -p /opt/conda && \

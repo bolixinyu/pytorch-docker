@@ -9,3 +9,4 @@ glances
 gpustat
 numba
 ipdb
+git+https://gitee.com/chenyaofo/torch4x@nightly

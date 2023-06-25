@@ -18,8 +18,8 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends --no-install-suggest
     rm -f /etc/apt/apt.conf.d/docker-clean && \
     apt-get update && \
     # libaio-dev for building deepspeed
-    # libibverbs-dev for RDMA/IB network
-    DEBIAN_FRONTEND=noninteractive $APT_INSTALL tzdata ca-certificates git wget cmake libaio-dev pdsh libibverbs-dev && \
+    # libibverbs-dev && librdmacm-dev for RDMA/IB network
+    DEBIAN_FRONTEND=noninteractive $APT_INSTALL tzdata ca-certificates git wget cmake libaio-dev pdsh libibverbs-dev librdmacm-dev && \
     ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime && \
     echo ${TZ} > /etc/timezone && \
     dpkg-reconfigure --frontend noninteractive tzdata && \
@@ -30,7 +30,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends --no-install-suggest
     ssh-keygen -t rsa -C "virtual-machine" -f "$HOME/.ssh/id_rsa" -P "" && \
     cat $HOME/.ssh/id_rsa.pub > $HOME/.ssh/authorized_keys && \
     # finally clean the cache
-    apt-get clean 
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN wget https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh -O ~/installer.sh && \
     /bin/bash ~/installer.sh -b -p /opt/conda && \

@@ -37,7 +37,7 @@ RUN /opt/conda/bin/mamba create -n dev python=${PYTHON_VERSION} && \
     PIP_INSTALL="/opt/conda/envs/dev/bin/pip install --no-cache-dir" && \
     $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/pytorch/torch2.0.1-cu118 && \
     $PIP_INSTALL -r https://raw.githubusercontent.com/vllm-project/vllm/main/requirements.txt && \
-    $PIP_INSTALL vllm && \
+    $PIP_INSTALL git+https://github.com/vllm-project/vllm.git && \
     PIP_LIST="/opt/conda/envs/dev/bin/pip list" && \
     $PIP_LIST && \
     echo "PIP Install Done!"

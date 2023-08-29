@@ -1,0 +1,64 @@
+# registry.cn-hongkong.aliyuncs.com/chenyaofo/torch_int:latest
+FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
+
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+    TZ=Asia/Shanghai \
+    TERM=xterm-256color \
+    PATH=/opt/conda/bin:$PATH \
+    PYTHON_VERSION=3.10 
+
+ENV TORCH_INT_ROOT="$PWD/torch-int" \
+    CUTLASS_PATH="$TORCH_INT_ROOT/submodules/cutlass" \
+    CUDA_PATH="/usr/local/cuda" \
+    PATH="$CUDA_PATH/bin:$PATH" \
+    CPATH="$CUDA_PATH/include:$CPATH" \
+    C_INCLUDE_PATH="$CUDA_PATH/include:$C_INCLUDE_PATH" \ 
+    CPLUS_INCLUDE_PATH="$CUDA_PATH/include:$CPLUS_INCLUDE_PATH" \
+    LD_LIBRARY_PATH="$CUDA_PATH/lib64:$LD_LIBRARY_PATH" \
+    CPATH=$CUTLASS_PATH/tools/util/include:$CUTLASS_PATH/include:$CPATH \
+    C_INCLUDE_PATH=$CUTLASS_PATH/tools/util/include:$CUTLASS_PATH/include:$C_INCLUDE_PATH \
+    CPLUS_INCLUDE_PATH=$CUTLASS_PATH/tools/util/include:$CUTLASS_PATH/include:$CPLUS_INCLUDE_PATH
+
+RUN APT_INSTALL="apt-get install -y --no-install-recommends --no-install-suggests" && \
+    GIT_CLONE="git clone --depth 10" && \
+    rm -rf /etc/apt/sources.list.d/cuda.list \
+           /etc/apt/sources.list.d/nvidia-ml.list && \
+    rm -f /etc/apt/apt.conf.d/docker-clean && \
+    apt-get update && \
+    # libaio-dev for building deepspeed
+    # libibverbs-dev && librdmacm-dev for RDMA/IB network
+    DEBIAN_FRONTEND=noninteractive $APT_INSTALL tzdata ca-certificates git wget cmake libaio-dev pdsh libibverbs-dev librdmacm-dev && \
+    ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime && \
+    echo ${TZ} > /etc/timezone && \
+    dpkg-reconfigure --frontend noninteractive tzdata && \
+    # finally clean the cache
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN wget https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh -O ~/installer.sh && \
+    /bin/bash ~/installer.sh -b -p /opt/conda && \
+    rm ~/installer.sh && \
+    /opt/conda/bin/conda init bash && \
+    # ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    # echo ". /opt/conda/etc/profile.d/conda.sh" >> /etc/bashrc && \
+    # echo "conda activate dev" >> /etc/bashrc && \
+    echo "conda activate dev" >> $HOME/.bashrc && \
+    find /opt/conda/ -follow -type f -name '*.a' -delete && \
+    find /opt/conda/ -follow -type f -name '*.js.map' -delete
+
+RUN /opt/conda/bin/mamba create -n dev python=${PYTHON_VERSION} && \
+    CONDA_INSTALL="/opt/conda/bin/mamba install -n dev -y" && \
+    /opt/conda/bin/mamba -c anaconda gxx_linux-64=9 && \
+    /opt/conda/bin/mamba clean -afy && \
+    echo 'Conda Install Done!' && \
+    PIP_INSTALL="/opt/conda/envs/dev/bin/pip install --no-cache-dir" && \
+    $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/pytorch/torch2.0.1-cu118 && \
+    $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/huggingface && \
+    $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/common && \
+    git clone --recurse-submodules https://github.com/Guangxuan-Xiao/torch-int.git && \
+    cd torch-int && $PIP_INSTALL -r requirements.txt && \
+    bash build_cutlass.sh && \
+    python setup.py install && \
+    PIP_LIST="/opt/conda/envs/dev/bin/pip list" && \
+    $PIP_LIST && \
+    echo "PIP Install Done!"
+

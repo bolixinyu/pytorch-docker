@@ -7,7 +7,7 @@ ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
     PATH=/opt/conda/bin:$PATH \
     PYTHON_VERSION=3.10 
 
-ENV TORCH_INT_ROOT="$PWD/torch-int" \
+ENV TORCH_INT_ROOT="/codes/torch-int" \
     CUTLASS_PATH="$TORCH_INT_ROOT/submodules/cutlass" \
     CUDA_PATH="/usr/local/cuda" \
     PATH="$CUDA_PATH/bin:$PATH" \
@@ -54,11 +54,12 @@ RUN /opt/conda/bin/mamba create -n dev python=${PYTHON_VERSION} && \
     $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/pytorch/torch2.0.1-cu118 && \
     $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/huggingface && \
     $PIP_INSTALL -r https://gitlab.com/chenyaofo/dockerfiles/-/raw/main/python-packages/common && \
-    git clone --recurse-submodules https://github.com/Guangxuan-Xiao/torch-int.git && \
-    cd torch-int && $PIP_INSTALL -r requirements.txt && \
-    bash build_cutlass.sh && \
-    python setup.py install && \
+    # bash build_cutlass.sh && \
+    # python setup.py install && \
     PIP_LIST="/opt/conda/envs/dev/bin/pip list" && \
     $PIP_LIST && \
     echo "PIP Install Done!"
+
+RUN  mkdir /codes && git clone --recurse-submodules https://github.com/Guangxuan-Xiao/torch-int.git /codes/torch-int && \
+    cd torch-int && $PIP_INSTALL -r requirements.txt && \
 

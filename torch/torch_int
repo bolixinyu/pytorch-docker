@@ -47,7 +47,7 @@ RUN wget https://github.com/conda-forge/miniforge/releases/latest/download/Mamba
 
 RUN /opt/conda/bin/mamba create -n dev python=${PYTHON_VERSION} && \
     CONDA_INSTALL="/opt/conda/bin/mamba install -n dev -y" && \
-    /opt/conda/bin/mamba -c anaconda gxx_linux-64=9 && \
+    /opt/conda/bin/mamba install -c anaconda gxx_linux-64=9 && \
     /opt/conda/bin/mamba clean -afy && \
     echo 'Conda Install Done!' && \
     PIP_INSTALL="/opt/conda/envs/dev/bin/pip install --no-cache-dir" && \
@@ -62,4 +62,5 @@ RUN /opt/conda/bin/mamba create -n dev python=${PYTHON_VERSION} && \
 
 RUN  mkdir /codes && git clone --recurse-submodules https://github.com/Guangxuan-Xiao/torch-int.git /codes/torch-int && \
     cd torch-int && $PIP_INSTALL -r requirements.txt && \
+    
 

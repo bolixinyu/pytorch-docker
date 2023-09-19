@@ -9,4 +9,6 @@ glances
 gpustat
 numba
 ipdb
+scipy
+matplotlib
 git+https://gitee.com/chenyaofo/torch4x@nightly

@@ -1,10 +1,10 @@
-# registry.cn-hongkong.aliyuncs.com/chenyaofo/pytorch:latest
-FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
+# registry.cn-hongkong.aliyuncs.com/chenyaofo/jupyter:latest
+FROM ubuntu:22.04
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
     TZ=Asia/Shanghai \
     TERM=xterm-256color \
-    PATH=/opt/conda/bin:$PATH \
+    PATH=/opt/conda/envs/dev/bin:$PATH \
     PYTHON_VERSION=3.10 
 
 RUN APT_INSTALL="apt-get install -y --no-install-recommends --no-install-suggests" && \

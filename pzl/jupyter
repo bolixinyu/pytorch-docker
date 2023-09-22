@@ -1,4 +1,4 @@
-# registry.cn-hongkong.aliyuncs.com/chenyaofo/jupyter0-cpu:latest
+# registry.cn-hongkong.aliyuncs.com/chenyaofo/jupyter-cpu:latest
 FROM ubuntu:22.04
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \

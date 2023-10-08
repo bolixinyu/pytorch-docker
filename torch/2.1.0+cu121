@@ -5,10 +5,10 @@ ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
     TZ=Asia/Shanghai \
     TERM=xterm-256color \
     PATH=/opt/conda/bin:$PATH \
-    PYTHON_VERSION=3.11 \
-    DS_BUILD_OPS=1 \
-    DS_BUILD_SPARSE_ATTN=0 \
-    TORCH_CUDA_ARCH_LIST="7.0;7.5;8.0;8.6;8.9;9.0"
+    PYTHON_VERSION=3.11
+    # DS_BUILD_OPS=1 \
+    # DS_BUILD_SPARSE_ATTN=0 \
+    # TORCH_CUDA_ARCH_LIST="7.0;7.5;8.0;8.6;8.9;9.0"
     # 7.0 for V100; 7.5 for T4; 8.0 for A100; 8.6 for 3090; 8.9 for 4090; 9.0 for H100;
 
 RUN APT_INSTALL="apt-get install -y --no-install-recommends --no-install-suggests" && \
@@ -65,4 +65,4 @@ RUN /opt/conda/bin/mamba create -n dev python=${PYTHON_VERSION} && \
 EXPOSE 8022
 CMD ["/usr/sbin/sshd", "-D"]
 
-# docker run -d --gpus all --name dsc --network host --privileged --ipc=host -v /etc/timezone:/etc/timezone:ro -v /etc/localtime:/etc/localtime:ro registry.cn-hongkong.aliyuncs.com/chenyaofo/pytorch:latest
+# docker run -d --gpus all --name dsc --network host --privileged --ipc=host -v /etc/timezone:/etc/timezone:ro -v /etc/localtime:/etc/localtime:ro registry.cn-hongkong.aliyuncs.com/chenyaofo/pytorch:2.1.0-cu121

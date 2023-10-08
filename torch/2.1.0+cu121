@@ -1,4 +1,4 @@
-# registry.cn-hongkong.aliyuncs.com/chenyaofo/pytorch:2.1.0+cu121
+# registry.cn-hongkong.aliyuncs.com/chenyaofo/pytorch:2.1.0-cu121
 FROM nvidia/cuda:12.1.1-devel-ubuntu22.04
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
